@@ -1,0 +1,23 @@
+{
+  "name": "gka-tpl-canvas",
+  "version": "0.0.2",
+  "description": "gka template canvas",
+  "main": "index.js",
+  "scripts": {
+  },
+  "homepage": "https://github.com/joeyguo/gka-tpl-canvas",
+  "bugs": {
+    "url": "https://github.com/joeyguo/gka-tpl-canvas/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/joeyguo/gka-tpl-canvas.git"
+  },
+  "keywords": [
+    "gka",
+    "template",
+    "canvas"
+  ],
+  "author": "joeyguo",
+  "license": "MIT"
+}
