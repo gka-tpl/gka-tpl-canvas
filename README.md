@@ -7,6 +7,8 @@
 
 [gka](https://github.com/joeyguo/gka) 文件生成模板，一键式生成 canvas 序列帧动画文件，并内置优化。
 
+[在线示例](https://gkajs.github.io/gka-tpl-canvas/example/gka.html)  [示例代码](https://github.com/gkajs/gka-tpl-canvas/tree/master/example)
+
 ### 内置优化
 
 - 开启相同帧图片复用 ✓
