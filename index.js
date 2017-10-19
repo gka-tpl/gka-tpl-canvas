@@ -31,6 +31,9 @@ module.exports = function (data, opts, tool) {
             "y": frame.y,
             "offX": frame.offX,
             "offY": frame.offY,
+            "file": frame.file,
+            "w": frame.w,
+            "h": frame.h
         };
 
         !isSameWidth && (res["width"] = frame.width);
@@ -41,7 +44,9 @@ module.exports = function (data, opts, tool) {
         return res;
     });
 
+    var names = tool.getNames();
+    
     tool.writeFile("data.js", `var data = ${JSON.stringify(data, null, '    ')}`);
-    tool.writeFile("gka.html", html(data, prefix, frameduration));
+    tool.writeFile("gka.html", html(data, names, prefix, frameduration));
 };
 
