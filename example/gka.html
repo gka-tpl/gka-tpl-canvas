@@ -11,14 +11,27 @@
     
     <div style="position: fixed; bottom: 10px;">
         Powered By <a target="_blank" href="https://github.com/gkajs/gka">gka</a> .
-        Template By <a target="_blank" href="https://github.com/gkajs/gka-tpl-canvas">gka-tpl-canvas</a>
+        Template By <a target="_blank" href="https://github.com/gkajs/gka-tpl-canvas">gka-tpl-canvas</a> 1.1.4
     </div>
 
     <script src="./data.js"></script>
     <script>
-    var img = new Image();
+    var imgNames = ["sprites.png"],
+        imgs = {};
 
-    img.onload = function() {
+    function loadImage(names, cb, prefix){
+        var n = 0;
+        names.forEach(function(name) {
+            var img = new Image();
+            img.onload = function() {
+                imgs[name] = img;
+                (++n === names.length) && cb && cb();
+            };
+            img.src = (prefix || '') + name;
+        });
+    }
+
+    loadImage(imgNames, function() {
         var canvas = document.getElementById('gkaStage'),
             ctx = canvas.getContext('2d'),
 
@@ -27,15 +40,31 @@
             i = 0,
             o = {};
 
+        var cacheCanvas = document.createElement("canvas"),
+            ctxCache = cacheCanvas.getContext("2d");
+
+        cacheCanvas.width = canvas.width;
+        cacheCanvas.height = canvas.height;
+
         setInterval(function(){
             o = frames[i];
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(img, o.x, o.y, o.width, o.height, o.offX, o.offY, o.width, o.height);
-            i = ++i === len? 0: i;
-        }, 60)
-    };
 
-    img.src = "img/" + data.file;
+            ctxCache.clearRect(0, 0, canvas.width, canvas.height);
+
+            o = Object.prototype.toString.call(o)=='[object Array]'? o: [o];
+            
+            for (var j = 0, t; j < o.length; j++) {
+                t = o[j];
+                ctxCache.drawImage((imgs[t.file] || imgs[data.file]), (t.x || data.x || 0), (t.y || data.y || 0), (t.width || data.width), (t.height || data.height), (t.offX || data.offX || 0), (t.offY || data.offY || 0), (t.width || data.width), (t.height || data.height));
+            }
+
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            ctx.drawImage(cacheCanvas, 0, 0, canvas.width, canvas.height);
+            i = ++i === len? 0: i;
+        }, 40)
+    }, "img/")
     </script>
 </body>
 </html>
