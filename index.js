@@ -1,15 +1,26 @@
+var gkaUtils = require('gka-utils'),
+    writeSync = gkaUtils.file.writeSync;
 var html = require("./lib/html");
-var utils = require("./lib/utils");
 
-module.exports = function (data, opts, tool, cb) {
+module.exports = function (data, opts, cb) {
+    
+    var dir = opts.imageDir;
 
-    var names = utils.getFileNames(data);
-    var _data = utils.formateData(data, ['name']);
+    function run(data, opts, key) {
+        var name = (key? key + '-' : '') + 'gka',
+            dataName = name + '-data.js',
+            htmlName = name + '.html';
 
-    tool.writeFile("data.js", `var data = ${JSON.stringify(_data, null, '    ')}`, function() {
-        tool.writeFile("gka.html", html(_data, JSON.stringify(names), opts), function() {
-            cb && cb();
-        });
-    });
-};
+		var _data = gkaUtils.data.formateData(data, ['name'], false);
+		
+        writeSync([dir, '..', dataName],  `var data = ${gkaUtils.data.fixArrayString(JSON.stringify(_data, null, '    '))}`);
+        writeSync([dir, '..', htmlName], html(data, opts, dataName));
+    }
 
+    run(data, opts);
+
+    // 对每个子目录都进行处理
+    gkaUtils._.effectSubFolderSync(run, data, opts);
+
+    cb && cb();
+}
